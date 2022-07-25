@@ -1,7 +1,7 @@
 function dijkstra(g: int[][][], n: int, s: int, t: int) -> int {
     let dist: int[] = [];
     for (let v = 0; v < n; v += 1) {
-        dist[v] = 10000000000 * n;
+        dist.push(10000000000 * n);
     }
 
     let S: {int: bool} = {};
@@ -16,12 +16,17 @@ function dijkstra(g: int[][][], n: int, s: int, t: int) -> int {
             let u = g[v][i][0];
             let w = g[v][i][1];
             if (dist[v] + w < dist[u]) {
-                S.remove(dist[u] * n + u);
+                if (S.contains(dist[u] * n + u)) {
+                    S.remove(dist[u] * n + u);
+                }
                 dist[u] = dist[v] + w;
                 S[dist[u] * n + u] = true;
             }
         }
     }
     
+    if (dist[t] == 10000000000 * n) {
+        return -1;
+    }
     return dist[t];
 }
